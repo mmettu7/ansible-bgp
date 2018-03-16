@@ -1,0 +1,49 @@
+---
+hostname: r2
+
+snmp:
+  contact: Narate Pokasub
+  location: PNH
+  ro:
+    - r3adc0nfig
+  rw:
+    - r3adwrit3
+
+loopback:
+  0:
+    address: 10.10.10.10 
+    netmask: 255.255.255.255
+  1:
+    address: 20.20.20.20
+    netmask: 255.255.255.255
+
+interfaces:
+  0/0:
+    desc: connect to ASN 2000 
+    address: 172.16.100.50 
+    netmask: 255.255.255.0
+
+  1/0:
+    desc: connect to branch 1
+    address: 192.168.1.100 
+    netmask: 255.255.255.0
+
+bgp:
+  asn: 1000 
+  neighbor:
+    - {address: 172.16.100.51, remote_as: 2000, next_hop: next-hop-self}
+  networks:
+    - {network: 20.20.20.20, mask: 255.255.255.255}
+  redistribute:
+    - connected
+    - static
+    - "eigrp 100"
+
+eigrp:
+  id: 100
+  networks:
+    - {network: 10.0.0.0}
+    - {network: 192.168.1.0}
+  redistribute:
+    - static
+    - "bgp 1000 metric 100 1 255 1 1500"

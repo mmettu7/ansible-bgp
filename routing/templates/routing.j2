@@ -1,0 +1,38 @@
+{% if eigrp is defined %}
+router eigrp {{ eigrp.id }}
+{% if eigrp.redistribute is defined %}
+{% for item in eigrp.redistribute %}
+ redistribute {{ item }}
+{% endfor %}
+{% endif %}
+{% for item in eigrp.networks %}
+ network {{ item.network }} 
+{% endfor %}
+{% endif %}
+
+{% if bgp is defined %}
+router bgp {{ bgp.asn }}
+{% for item in bgp.neighbor %}
+ neighbor {{ item.address }} remote-as {{ item.remote_as }}
+{% endfor %}
+ !
+ address-family ipv4
+{% for item in bgp.networks %}
+  network {{ item.network }} mask {{ item.mask }}
+{% endfor %}
+{% if bgp.redistribute is defined %}
+{% for item in bgp.redistribute %}
+  redistribute {{ item }}
+{% endfor %}
+{% endif %}
+{%for item in bgp.neighbor %}
+  neighbor {{ item.address }} activate
+{% if item.next_hop is defined %}
+  neighbor {{ item.address }} {{ item.next_hop }}
+{% elif item.originate is defined %}
+  neighbor {{ item.address }} {{ item.originate }}
+  default-information originate
+{% endif %}
+{% endfor %}
+ exit-address-family
+{% endif %}

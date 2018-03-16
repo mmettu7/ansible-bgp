@@ -1,0 +1,25 @@
+{% if loopback is defined %}
+{% for port, value in loopback.items() %}
+interface Loopback{{ port }}
+ ip address {{ value.address }} {{ value.netmask }}
+{% endfor %}
+{% endif %}
+
+{% if interfaces is defined %}
+{% for port, value in interfaces.items() %}
+interface GigabitEthernet{{ port }}
+{% if 'desc' is defined %}
+ description {{ value.desc }}
+{% endif %}
+ ip address {{ value.address }} {{ value.netmask }}
+{% set which_port -%}
+GigabitEthernet{{ port }}
+{%- endset %}
+{% set port_status -%}
+{{ ansible_net_interfaces[which_port]['operstatus'] }}
+{%- endset %}
+{% if port_status != "up" %}
+ no shutdown
+{% endif %}
+{% endfor %}
+{% endif %}

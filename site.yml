@@ -1,0 +1,9 @@
+---
+- hosts: bgp_router
+  gather_facts: false
+  connection: local
+
+  roles:
+  - snmp
+  - interfaces
+  - routing

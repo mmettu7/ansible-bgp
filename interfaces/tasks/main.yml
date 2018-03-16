@@ -1,0 +1,11 @@
+---
+# tasks file for interfaces
+- name: gathering interfaces status
+  ios_facts:
+    provider: "{{ connector }}"
+    gather_subset: interfaces
+
+- name: apply interfaces configuration
+  ios_config:
+    provider: "{{ connector }}"
+    src: interfaces.j2

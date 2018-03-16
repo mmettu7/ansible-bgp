@@ -1,0 +1,27 @@
+---
+hostname: r3
+
+snmp:
+  contact: Narate Pokasub
+  location: PNH
+  ro:
+    - r3adc0nfig
+  rw:
+    - r3adwrit3
+
+loopback:
+  0:
+    address: 30.30.30.30 
+    netmask: 255.255.255.255
+
+interfaces:
+  1/0:
+    desc: connect to Head Office 
+    address: 192.168.1.101 
+    netmask: 255.255.255.0
+
+eigrp:
+  id: 100 
+  networks:
+   - {network: 30.0.0.0}
+   - {network: 192.168.1.0}

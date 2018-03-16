@@ -1,0 +1,30 @@
+---
+hostname: r1
+
+snmp:
+  contact: Narate Pokasub
+  location: PNH
+  ro:
+    - r3adc0nfig
+  rw:
+    - r3adwrit3
+
+loopback:
+  0:
+    address: 22.22.22.22 
+    netmask: 255.255.255.255 
+
+interfaces:
+  0/0:
+    desc: connect to ASN 1000 
+    address: 172.16.100.51 
+    netmask: 255.255.255.0
+
+bgp:
+  asn: 2000 
+  router_id: 22.22.22.22 
+  neighbor:
+    - {address: 172.16.100.50, remote_as: 1000, originate: default-originate}
+  networks:
+    - {network: 22.22.22.22, mask: 255.255.255.255}
+    - {network: 172.16.100.0, mask: 255.255.255.0}

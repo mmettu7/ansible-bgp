@@ -1,0 +1,6 @@
+---
+# tasks file for routing
+- name: apply routing
+  ios_config:
+    provider: "{{ connector }}"
+    src: routing.j2
